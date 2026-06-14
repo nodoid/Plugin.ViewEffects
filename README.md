@@ -35,4 +35,4 @@ Targets `net10.0-android`, `net10.0-ios`, `net10.0-maccatalyst`, and `net10.0-wi
 
 ## License
 
-MIT
+DILLIGAF — see [LICENSE.txt](https://github.com/nodoid/Plugin.ViewEffects/blob/main/src/Plugin.ViewEffects/LICENSE.txt). Do whatever you like; no warranty.

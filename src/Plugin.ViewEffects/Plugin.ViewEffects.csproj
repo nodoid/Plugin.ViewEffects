@@ -17,9 +17,13 @@
 		<Version>1.0.0</Version>
 		<Authors>Paul F. Johnson</Authors>
 		<Description>A .NET MAUI plugin that physically removes a View from its parent's visual tree via an attached property, instead of merely collapsing it like IsVisible. The view is re-inserted at its original index when the condition flips back.</Description>
-		<PackageTags>maui;plugin;view;layout;visibility;remove;xaml</PackageTags>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageTags>maui;plugin;view;layout;visibility;remove;animation;xaml</PackageTags>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageProjectUrl>https://github.com/nodoid/Plugin.ViewEffects</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/nodoid/Plugin.ViewEffects</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageReleaseNotes>Initial release. See the github repo for details.</PackageReleaseNotes>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 
 		<!-- Enable XAML source generation for faster build times and improved performance.
@@ -43,6 +47,7 @@
 
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="LICENSE.txt" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>

@@ -1,0 +1,18 @@
+DILLIGAF License
+
+Copyright (c) 2026 Paul F. Johnson
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated files, to do absolutely whatever they like with it:
+use it, copy it, modify it, merge it, publish it, distribute it, sublicense it,
+sell it, or set it on fire.
+
+Do I Look Like I Give A Flip? No. The author neither minds what you do with it nor
+accepts any responsibility for it.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHOR BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

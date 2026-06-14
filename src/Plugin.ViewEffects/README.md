@@ -136,4 +136,4 @@ Supported containers:
 
 ## License
 
-MIT
+DILLIGAF — see [LICENSE.txt](https://github.com/nodoid/Plugin.ViewEffects/blob/main/src/Plugin.ViewEffects/LICENSE.txt). Do whatever you like; no warranty.
