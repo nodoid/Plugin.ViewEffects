@@ -23,12 +23,15 @@ participates in layout at all.
 Every animation has a **bound duration in seconds (default 3)**, and **once the animation completes the
 view is removed**.
 
-There are two **reveal** animations that bring a view *in* and leave it in place:
+There are three **reveal** animations that bring a view *in* and leave it in place:
 
 - `MaterialiseAsync` — the reverse of `Dematerialise`. The view **starts blank** and flickers into
   existence at its final laid-out size.
 - `TennisAppearAsync(side)` — the view volleys in from `Left`/`Right`, arcing back and forth four times,
   then lands in place.
+- `UnblurAsync` — the view starts fully blurred and the blur is gradually removed until the sharp
+  original is revealed. Default **6 seconds**; optional tap-to-skip (`TapEnable.On`) and discrete
+  stepping (`timestep`).
 
 **`ShatterOrigin`** is the impact point the glass radiates from — one of the nine anchor points:
 `Centre` (default), `TopLeft`, `TopCentre`, `TopRight`, `Left`, `Right`, `BottomLeft`, `BottomCentre`,
@@ -118,6 +121,7 @@ await myView.TennisDisappearAsync(TennisSide.Left);
 // Reveals — bring a view in and leave it in place:
 await myView.MaterialiseAsync();              // starts blank, flickers in
 await myView.TennisAppearAsync(TennisSide.Right);
+await myView.UnblurAsync();                   // 6 s; UnblurAsync(4, TapEnable.On, 0.5) for tap + stepping
 ```
 
 ## How it works

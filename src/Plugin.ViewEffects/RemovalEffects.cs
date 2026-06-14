@@ -389,6 +389,101 @@ static class RemovalEffects
         }
     }
 
+    // ── Unblur (reveal: starts fully blurred, sharpens to the real view; optional tap-to-skip) ───────
+    internal static async Task RunUnblurAsync(View view, LayoutSlot slot, double seconds, TapEnable tap, double timestep)
+    {
+        if (IsAnimating(view))
+            return;
+        if (seconds <= 0)
+            seconds = ViewEffects.ConfiguredUnblurSeconds;
+
+        // timestep > 0 quantises the unblur into discrete steps held for ~timestep seconds each.
+        int steps = timestep > 0 ? Math.Max(1, (int)Math.Round(seconds / timestep)) : 0;
+
+        var cts = new CancellationTokenSource();
+        double originalOpacity = view.Opacity;
+        GraphicsView? overlay = null;
+        IImage[]? levels = null;
+        IImage? image = null;
+
+        try
+        {
+            image = await TryCaptureAsync(view);
+            if (image is null)
+                return; // can't blur without a snapshot — leave the view as it is
+
+            var (w, h) = MeasuredSize(view);
+            levels = BuildBlurLevels(image);
+            var drawable = new UnblurDrawable(levels, view.BackgroundColor ?? Colors.LightGray, steps) { Progress = 0 };
+
+            overlay = new GraphicsView
+            {
+                Drawable = drawable,
+                WidthRequest = w,
+                HeightRequest = h,
+                BackgroundColor = Colors.Transparent,
+            };
+            CopyLayoutAttributes(view, overlay);
+
+            var tcs = new TaskCompletionSource();
+            var name = "vr-unblur-" + Interlocked.Increment(ref _animationCounter);
+
+            view.SetValue(ActiveEffectProperty, new ActiveEffect { Cts = cts, Restore = () => overlay!.AbortAnimation(name) });
+
+            // Optional tap-to-skip: jump straight to the fully unblurred view.
+            if (tap == TapEnable.On)
+            {
+                var gesture = new TapGestureRecognizer();
+                gesture.Tapped += (_, _) =>
+                {
+                    drawable.Progress = 1;
+                    overlay!.Invalidate();
+                    overlay.AbortAnimation(name);
+                    tcs.TrySetResult();
+                };
+                overlay.GestureRecognizers.Add(gesture);
+            }
+
+            // Swap the live view out for the (blurred) overlay so the sharp original is never shown.
+            slot.Detach(view);
+            slot.Attach(overlay);
+            overlay.Invalidate();
+
+            var animation = new Animation(p => { drawable.Progress = p; overlay!.Invalidate(); }, 0, 1);
+            animation.Commit(overlay, name, 16, (uint)Math.Max(1, seconds * 1000), Easing.Linear,
+                             (_, _) => tcs.TrySetResult(), null);
+            cts.Token.Register(() => { overlay!.AbortAnimation(name); tcs.TrySetResult(); });
+
+            await tcs.Task;
+        }
+        catch { /* fall through to reveal */ }
+        finally
+        {
+            if (overlay is not null && overlay.Parent is not null) slot.Detach(overlay);
+            if (image is not null && view.Parent is null) slot.Attach(view); // reveal the real, sharp view
+            view.Opacity = originalOpacity;
+            if (view.GetValue(ActiveEffectProperty) is ActiveEffect) view.SetValue(ActiveEffectProperty, null);
+            cts.Dispose();
+            if (levels is not null)
+                foreach (var level in levels) { try { level.Dispose(); } catch { } }
+        }
+    }
+
+    /// <summary>Builds snapshot copies from blurriest (heavily downsized) to sharpest (the original, last).</summary>
+    static IImage[] BuildBlurLevels(IImage image)
+    {
+        float maxDim = Math.Max(image.Width, image.Height);
+        float[] fractions = { 0.03f, 0.05f, 0.08f, 0.12f, 0.18f, 0.27f, 0.40f, 0.60f, 0.80f };
+        var levels = new List<IImage>(fractions.Length + 1);
+        foreach (var f in fractions)
+        {
+            try { levels.Add(image.Downsize(Math.Max(2f, maxDim * f), disposeOriginal: false)); }
+            catch { /* skip a level that can't be produced */ }
+        }
+        levels.Add(image); // sharp original is the final level
+        return levels.ToArray();
+    }
+
     /// <summary>TARDIS materialise opacity envelope: 0 (blank) → 1 (solid), flickering fast then settling.</summary>
     static float MaterialiseOpacity(float p)
     {

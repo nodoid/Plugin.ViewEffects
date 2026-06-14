@@ -18,6 +18,7 @@ Namespace: `Plugin.ViewEffects`
 | `TennisDisappearAsync` | `Task TennisDisappearAsync(this View view, TennisSide side, double seconds = UseDefault)` | Removal. |
 | `MaterialiseAsync` | `Task MaterialiseAsync(this View view, double seconds = UseDefault)` | Reveal — starts blank, leaves the view in place. |
 | `TennisAppearAsync` | `Task TennisAppearAsync(this View view, TennisSide side, double seconds = UseDefault)` | Reveal. |
+| `UnblurAsync` | `Task UnblurAsync(this View view, double seconds = UseDefault, TapEnable tap = TapEnable.Off, double timestep = 0)` | Reveal. Default duration 6 s; `tap` enables tap-to-skip; `timestep` > 0 steps discretely. |
 | `PlayAsync` | `Task PlayAsync(this View view, RemovalAnimation animation, ShatterOrigin origin = ShatterOrigin.Centre, TennisSide tennisSide = TennisSide.Left, double seconds = UseDefault)` | Plays any removal animation. |
 
 Constants:
@@ -25,6 +26,7 @@ Constants:
 | Member | Value | Meaning |
 |--------|-------|---------|
 | `ViewEffects.DefaultSeconds` | `3` | Built-in default duration. |
+| `ViewEffects.DefaultUnblurSeconds` | `6` | Built-in default duration for `UnblurAsync`. |
 | `ViewEffects.UseDefault` | `0` | Sentinel for `seconds` meaning "use the configured default". |
 
 All methods are no-ops (return a completed task) if the view is not in a [supported
@@ -59,6 +61,10 @@ Each property also exposes the corresponding `BindableProperty` (e.g. `RemoveWhe
 
 `Left`, `Right`.
 
+### TapEnable
+
+`Off` (default), `On`. Whether tapping the view during `UnblurAsync` skips to the end.
+
 ## Host builder
 
 ### AppHostBuilderExtensions
@@ -77,5 +83,6 @@ Registers the plugin and applies optional configuration. Returns the same builde
 sealed class ViewEffectsOptions
 {
     double DefaultDurationSeconds { get; set; } // default: 3
+    double DefaultUnblurSeconds   { get; set; } // default: 6
 }
 ```

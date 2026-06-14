@@ -14,6 +14,7 @@ remove the view from its parent; **reveal** animations bring a view in and leave
 | [Tennis Disappear](#tennis-disappear) | removal | `TennisSide` |
 | [Materialise](#materialise) | reveal | — |
 | [Tennis Appear](#tennis-appear) | reveal | `TennisSide` |
+| [Unblur](#unblur) | reveal | `TapEnable`; default 6 s |
 
 Removal animations are available through both the [attached-property API](usage.md#xaml--attached-properties)
 (`RemovalAnimation`) and the [imperative API](usage.md#c--imperative-api). The two reveals are imperative
@@ -127,6 +128,29 @@ in place. (Reveal — leaves the view in place.)
 ```csharp
 await view.TennisAppearAsync(TennisSide.Right);
 ```
+
+## Unblur
+
+The view is captured and shown **fully blurred**, then the blur is gradually removed over the duration
+until the sharp original is revealed in place. The sharp original is never shown until the very end.
+(Reveal — leaves the view in place.)
+
+- **Default duration is 6 seconds** (not 3). Configurable via
+  [`UseViewEffects`](configuration.md) (`DefaultUnblurSeconds`).
+- **Tap to skip is opt-in.** Pass `TapEnable.On` to let a tap on the view jump straight to the
+  unblurred result; the default is `TapEnable.Off`.
+- **Stepping is optional.** Pass a `timestep` (seconds) to snap the blur through discrete steps held for
+  ~that long each, instead of dissolving smoothly. The default (`0`) gives the smooth animation.
+
+```csharp
+await view.UnblurAsync();                           // 6 s, smooth, tap disabled
+await view.UnblurAsync(4, TapEnable.On);            // 4 s, tap-to-skip enabled
+await view.UnblurAsync(6, TapEnable.Off, 0.5);      // steps every ~0.5 s
+```
+
+> Blur is approximated by progressively downsizing the snapshot and letting the platform upscale it
+> (more downsizing = blurrier), cross-dissolving toward the sharp original. There is no portable
+> Gaussian-blur primitive in MAUI Graphics, so this is the cross-platform approach.
 
 ---
 

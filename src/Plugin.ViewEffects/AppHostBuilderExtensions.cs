@@ -11,6 +11,12 @@ public sealed class ViewEffectsOptions
     /// to <see cref="ViewEffects.DefaultSeconds"/> (3).
     /// </summary>
     public double DefaultDurationSeconds { get; set; } = ViewEffects.DefaultSeconds;
+
+    /// <summary>
+    /// The default duration, in seconds, for <see cref="ViewEffects.UnblurAsync"/> when none is
+    /// specified. Defaults to <see cref="ViewEffects.DefaultUnblurSeconds"/> (6).
+    /// </summary>
+    public double DefaultUnblurSeconds { get; set; } = ViewEffects.DefaultUnblurSeconds;
 }
 
 /// <summary>
@@ -40,6 +46,9 @@ public static class AppHostBuilderExtensions
 
         if (options.DefaultDurationSeconds > 0)
             ViewEffects.ConfiguredDefaultSeconds = options.DefaultDurationSeconds;
+
+        if (options.DefaultUnblurSeconds > 0)
+            ViewEffects.ConfiguredUnblurSeconds = options.DefaultUnblurSeconds;
 
         builder.Services.AddSingleton(options);
         return builder;

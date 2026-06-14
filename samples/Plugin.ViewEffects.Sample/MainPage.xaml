@@ -56,6 +56,7 @@
                             <x:String>Dematerialise</x:String>
                             <x:String>Plughole</x:String>
                             <x:String>Tennis</x:String>
+                            <x:String>Unblur</x:String>
                         </Picker.Items>
                     </Picker>
                 </VerticalStackLayout>
@@ -85,6 +86,20 @@
                             <x:String>Right</x:String>
                         </Picker.Items>
                     </Picker>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout x:Name="TapSection" Grid.Column="1" Spacing="2" IsVisible="False">
+                    <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="8">
+                        <Label Grid.Column="0" Text="Tap to skip" FontSize="12" VerticalOptions="Center" />
+                        <Switch Grid.Column="1" x:Name="TapSwitch" HorizontalOptions="Start" />
+                    </Grid>
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="6">
+                        <Label Grid.Column="0" Text="Timestep" FontSize="12" VerticalOptions="Center" />
+                        <Stepper Grid.Column="1" x:Name="TimestepStepper" Minimum="0" Maximum="2" Increment="0.25"
+                                 Value="0" ValueChanged="OnTimestepChanged" HorizontalOptions="Start" />
+                        <Label Grid.Column="2" x:Name="TimestepLabel" Text="off" FontSize="12"
+                               VerticalOptions="Center" WidthRequest="36" />
+                    </Grid>
                 </VerticalStackLayout>
             </Grid>
 

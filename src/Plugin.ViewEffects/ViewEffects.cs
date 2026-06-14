@@ -21,6 +21,12 @@ public static class ViewEffects
     /// <summary>The effective default duration, overridable at startup through <c>UseViewEffects</c>.</summary>
     internal static double ConfiguredDefaultSeconds = DefaultSeconds;
 
+    /// <summary>The built-in default duration for <see cref="UnblurAsync"/>, in seconds.</summary>
+    public const double DefaultUnblurSeconds = 6;
+
+    /// <summary>The effective unblur default, overridable at startup through <c>UseViewEffects</c>.</summary>
+    internal static double ConfiguredUnblurSeconds = DefaultUnblurSeconds;
+
     /// <summary>Freezes the view (light → dark blue) then shatters it into falling ice shards, then removes it.</summary>
     public static Task FreezeAsync(this View view, double seconds = UseDefault)
         => PlayAsync(view, RemovalAnimation.Freeze, seconds: seconds);
@@ -57,6 +63,26 @@ public static class ViewEffects
     {
         ArgumentNullException.ThrowIfNull(view);
         return RemovalEffects.RunMaterialiseAsync(view, seconds);
+    }
+
+    /// <summary>
+    /// Unblur: the view is captured and shown fully blurred, then the blur is gradually removed over
+    /// <paramref name="seconds"/> (default 6) until the sharp original is revealed in place. The sharp
+    /// original is not shown until the very end. With <paramref name="tap"/> set to <see cref="TapEnable.On"/>,
+    /// tapping the view skips straight to the unblurred result.
+    /// </summary>
+    /// <param name="timestep">
+    /// When greater than 0, the unblur snaps through discrete steps held for roughly this many seconds
+    /// each, rather than dissolving smoothly. The default (0) gives the smooth animation.
+    /// </param>
+    public static Task UnblurAsync(this View view, double seconds = UseDefault,
+                                   TapEnable tap = TapEnable.Off, double timestep = 0)
+    {
+        ArgumentNullException.ThrowIfNull(view);
+        var slot = RemovalEffects.LayoutSlot.Capture(view);
+        return slot is null
+            ? Task.CompletedTask
+            : RemovalEffects.RunUnblurAsync(view, slot.Value, seconds, tap, timestep);
     }
 
     /// <summary>

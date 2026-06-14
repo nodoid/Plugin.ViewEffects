@@ -57,6 +57,16 @@ public enum TennisSide
     Right,
 }
 
+/// <summary>Whether tapping the view skips an in-progress animation to its end. Defaults to <see cref="Off"/>.</summary>
+public enum TapEnable
+{
+    /// <summary>Tapping does nothing (default).</summary>
+    Off,
+
+    /// <summary>Tapping the view jumps straight to the finished state.</summary>
+    On,
+}
+
 /// <summary>
 /// The impact point a <see cref="RemovalAnimation.Shatter"/> radiates from — the nine anchor points of
 /// the view. Defaults to <see cref="Centre"/>.

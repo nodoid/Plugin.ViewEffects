@@ -14,6 +14,7 @@ builder
     .UseViewEffects(options =>
     {
         options.DefaultDurationSeconds = 2.5;   // default is 3
+        options.DefaultUnblurSeconds   = 5;     // default is 6 (UnblurAsync)
     });
 ```
 

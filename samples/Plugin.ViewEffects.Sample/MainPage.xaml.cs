@@ -17,6 +17,8 @@ public partial class MainPage : ContentPage
 
     bool IsTennis => AnimationPicker.SelectedIndex == 6;
 
+    bool IsUnblur => AnimationPicker.SelectedIndex == 7;
+
     RemovalAnimation SelectedAnimation => AnimationPicker.SelectedIndex switch
     {
         0 => RemovalAnimation.Freeze,
@@ -49,17 +51,34 @@ public partial class MainPage : ContentPage
 
     void UpdateExtraControls()
     {
-        OriginSection.IsVisible = SelectedAnimation == RemovalAnimation.Shatter;
+        OriginSection.IsVisible = !IsTennis && !IsUnblur && SelectedAnimation == RemovalAnimation.Shatter;
         SideSection.IsVisible = IsTennis;
+        TapSection.IsVisible = IsUnblur;
         MaterialiseButton.Text = IsTennis ? "Appear ▶" : "Materialise ✨";
     }
 
     void OnDurationChanged(object? sender, ValueChangedEventArgs e)
         => DurationLabel.Text = $"{e.NewValue:0.0}s";
 
+    void OnTimestepChanged(object? sender, ValueChangedEventArgs e)
+        => TimestepLabel.Text = e.NewValue <= 0 ? "off" : $"{e.NewValue:0.00}s";
+
     async void OnAnimateClicked(object? sender, EventArgs e)
     {
         if (_busy) return;
+
+        if (IsUnblur)
+        {
+            if (!Stage.Contains(DemoCard))
+                Stage.Add(DemoCard);
+            var tap = TapSwitch.IsToggled ? TapEnable.On : TapEnable.Off;
+            var timestep = TimestepStepper.Value;
+            var hint = tap == TapEnable.On ? " — tap the card to skip" : "";
+            await RunAsync($"Unblur ({Seconds:0.0}s){hint}…", DemoCard.UnblurAsync(Seconds, tap, timestep));
+            Status("Unblurred.");
+            return;
+        }
+
         if (!Stage.Contains(DemoCard))
         {
             Status("Stage is empty — Reset or Appear first.");
