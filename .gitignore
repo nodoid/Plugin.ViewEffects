@@ -1,0 +1,35 @@
+## .NET / MAUI build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+
+## Rider / IDE
+.idea/
+.vs/
+*.DotSettings.user
+
+## macOS
+.DS_Store
+
+## MAUI / platform artifacts
+*.binlog
+*.aab
+*.apk
+*.ipa
+*.app/
+*.dSYM/
