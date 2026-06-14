@@ -7,6 +7,17 @@ matching **reveal** animations to bring a view in.
 Animations: **Freeze**, **Melt**, **Explode**, **Shatter** (glass, 9-point origin), **Dematerialise**,
 **Plughole**, **Tennis Disappear** — and the reveals **Materialise** and **Tennis Appear**.
 
+## Documentation
+
+Full docs are in [`docs/`](docs/index.md):
+
+- [Getting started](docs/getting-started.md)
+- [Animations](docs/animations.md)
+- [Usage](docs/usage.md)
+- [Configuration](docs/configuration.md)
+- [API reference](docs/api-reference.md)
+- [How it works](docs/how-it-works.md)
+
 ## Repository layout
 
 | Path | What |
