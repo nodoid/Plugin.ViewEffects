@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Plugin.ViewEffects.Sample.MainPage"
+             Title="ViewEffects">
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="16" RowSpacing="12">
+
+        <Label Grid.Row="0"
+               Text="Pick an animation, then Animate. Materialise brings it back."
+               HorizontalTextAlignment="Center"
+               FontSize="14" />
+
+        <!-- Stage: holds the demo card; a dashed placeholder shows through when it's gone -->
+        <Grid x:Name="Stage" Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Center">
+
+            <Border Stroke="#80808080" StrokeThickness="1" StrokeDashArray="6,4" StrokeShape="RoundRectangle 24"
+                    WidthRequest="260" HeightRequest="320" BackgroundColor="Transparent">
+                <Label Text="(empty stage)" TextColor="#80808080"
+                       HorizontalOptions="Center" VerticalOptions="Center" />
+            </Border>
+
+            <!-- The view under test -->
+            <Border x:Name="DemoCard"
+                    WidthRequest="260" HeightRequest="320"
+                    StrokeShape="RoundRectangle 24" StrokeThickness="0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#FF6A00" Offset="0.0" />
+                        <GradientStop Color="#EE0979" Offset="0.55" />
+                        <GradientStop Color="#512BD4" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <VerticalStackLayout Spacing="14" Padding="20" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Image Source="dotnet_bot.png" HeightRequest="140" />
+                    <Label Text="Remove me!" FontSize="26" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center" />
+                    <Label Text="Freeze · Melt · Explode · Shatter"
+                           TextColor="#F0FFFFFF" FontSize="13" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+        <!-- Controls -->
+        <VerticalStackLayout Grid.Row="2" Spacing="10">
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                    <Label Text="Animation" FontSize="12" />
+                    <Picker x:Name="AnimationPicker" SelectedIndexChanged="OnAnimationPickerChanged">
+                        <Picker.Items>
+                            <x:String>Freeze</x:String>
+                            <x:String>Melt</x:String>
+                            <x:String>Explode</x:String>
+                            <x:String>Shatter</x:String>
+                            <x:String>Dematerialise</x:String>
+                            <x:String>Plughole</x:String>
+                            <x:String>Tennis</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout x:Name="OriginSection" Grid.Column="1" Spacing="2">
+                    <Label Text="Shatter origin" FontSize="12" />
+                    <Picker x:Name="OriginPicker">
+                        <Picker.Items>
+                            <x:String>TopLeft</x:String>
+                            <x:String>TopCentre</x:String>
+                            <x:String>TopRight</x:String>
+                            <x:String>Left</x:String>
+                            <x:String>Centre</x:String>
+                            <x:String>Right</x:String>
+                            <x:String>BottomLeft</x:String>
+                            <x:String>BottomCentre</x:String>
+                            <x:String>BottomRight</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout x:Name="SideSection" Grid.Column="1" Spacing="2" IsVisible="False">
+                    <Label Text="Tennis side" FontSize="12" />
+                    <Picker x:Name="SidePicker">
+                        <Picker.Items>
+                            <x:String>Left</x:String>
+                            <x:String>Right</x:String>
+                        </Picker.Items>
+                    </Picker>
+                </VerticalStackLayout>
+            </Grid>
+
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8" VerticalOptions="Center">
+                <Label Grid.Column="0" Text="Duration" FontSize="12" VerticalOptions="Center" />
+                <Stepper Grid.Column="1" x:Name="DurationStepper" Minimum="0.5" Maximum="8" Increment="0.5"
+                         Value="3" ValueChanged="OnDurationChanged" HorizontalOptions="Start" />
+                <Label Grid.Column="2" x:Name="DurationLabel" Text="3.0s" FontSize="12"
+                       VerticalOptions="Center" WidthRequest="44" />
+            </Grid>
+
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                <Button Grid.Column="0" x:Name="AnimateButton" Text="Animate ▶" Clicked="OnAnimateClicked" />
+                <Button Grid.Column="1" x:Name="MaterialiseButton" Text="Materialise ✨"
+                        Clicked="OnMaterialiseClicked" BackgroundColor="#2E7D32" />
+                <Button Grid.Column="2" x:Name="ResetButton" Text="Reset ⟳"
+                        Clicked="OnResetClicked" BackgroundColor="#455A64" />
+            </Grid>
+
+            <Label x:Name="StatusLabel" Text="Ready." FontSize="12" TextColor="#808080"
+                   HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
